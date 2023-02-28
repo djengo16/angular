@@ -6,12 +6,14 @@ export class RecipeService {
   recipeSelected = new EventEmitter<Recipe>();
   private recipes: Recipe[] = [
     new Recipe(
+      '1',
       'Shakshuka Recipe',
       'Shakshuka is a North African and Middle Eastern meal of poached eggs in a simmering tomato sauce.',
       'https://i2.wp.com/www.downshiftology.com/wp-content/uploads/2018/12/Shakshuka-19.jpg',
       [new Ingredient('Eggs', 4), new Ingredient('Tomato', 2)]
     ),
     new Recipe(
+      '2',
       'Easy Fluffy Pancakes',
       'These pancakes are light and fluffy and made entirely from scratch. They’re not too sweet and are very delicious',
       'https://www.inspiredtaste.net/wp-content/uploads/2022/11/Fluffy-Pancakes-Recipe-Video.jpg',
@@ -25,6 +27,9 @@ export class RecipeService {
 
   getRecipes() {
     return this.recipes.slice();
+  }
+  getRecipeById(id: string) {
+    return this.recipes.find((x) => x.id == id);
   }
   addRecipe(recipe: Recipe) {
     this.recipes.push(recipe);

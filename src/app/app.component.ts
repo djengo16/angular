@@ -7,8 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   currentNavigationValue: string = 'recipes';
-
-  onNavValueChanged(navValue: string) {
-    this.currentNavigationValue = navValue;
-  }
 }
