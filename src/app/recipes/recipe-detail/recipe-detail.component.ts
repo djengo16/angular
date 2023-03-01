@@ -1,4 +1,3 @@
-import { Input } from '@angular/core';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Ingredient } from 'app/shared/ingredient.model';
@@ -22,9 +21,9 @@ export class RecipeDetailComponent {
   ) {}
 
   ngOnInit() {
-    this.recipe = this.recipeService.getRecipeById(
-      this.route.snapshot.params['id']
-    );
+    // this.recipe = this.recipeService.getRecipeById(
+    //   this.route.snapshot.params['id']
+    // );
     this.route.params.subscribe((params: Params) => {
       this.recipe = this.recipeService.getRecipeById(params['id']);
     });

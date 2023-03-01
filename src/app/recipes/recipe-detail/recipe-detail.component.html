@@ -27,7 +27,10 @@
             >To Shopping List</a
           >
         </li>
-        <li><a style="cursor: pointer">Edit Recipe</a></li>
+        <li>
+          <a style="cursor: pointer" [routerLink]="['edit']">Edit Recipe</a>
+          <!--current path is /recipes/id, thats why we only need to append edit as to relative-->
+        </li>
         <li><a style="cursor: pointer">Delete Recipe</a></li>
       </ul>
     </div>
