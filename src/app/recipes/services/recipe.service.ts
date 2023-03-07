@@ -3,16 +3,15 @@ import { Ingredient } from 'app/shared/ingredient.model';
 import { Subject } from 'rxjs';
 
 export class RecipeService {
+  recipesChnaged = new Subject<Recipe[]>();
   private recipes: Recipe[] = [
     new Recipe(
-      '1',
       'Shakshuka Recipe',
       'Shakshuka is a North African and Middle Eastern meal of poached eggs in a simmering tomato sauce.',
       'https://i2.wp.com/www.downshiftology.com/wp-content/uploads/2018/12/Shakshuka-19.jpg',
       [new Ingredient('Eggs', 4), new Ingredient('Tomato', 2)]
     ),
     new Recipe(
-      '2',
       'Easy Fluffy Pancakes',
       'These pancakes are light and fluffy and made entirely from scratch. They’re not too sweet and are very delicious',
       'https://www.inspiredtaste.net/wp-content/uploads/2022/11/Fluffy-Pancakes-Recipe-Video.jpg',
@@ -27,11 +26,16 @@ export class RecipeService {
   getRecipes() {
     return this.recipes.slice();
   }
-  getRecipeById(id: string) {
-    return this.recipes.find((x) => x.id == id);
+  getRecipe(id: string) {
+    return this.recipes[+id];
   }
   addRecipe(recipe: Recipe) {
     this.recipes.push(recipe);
+    this.recipesChnaged.next(this.recipes.slice());
+  }
+  updateRecipe(index, newRecipe: Recipe) {
+    this.recipes[index] = newRecipe;
+    this.recipesChnaged.next(this.recipes.slice());
   }
   removeRecipe(recipe: Recipe) {
     let index = this.recipes.indexOf(recipe);
@@ -40,5 +44,9 @@ export class RecipeService {
   editRecipe(recipe: Recipe) {
     let index = this.recipes.indexOf(recipe);
     this.recipes[index] = recipe;
+  }
+  deleteRecipe(recipeIndex) {
+    this.recipes.splice(recipeIndex, 1);
+    this.recipesChnaged.next(this.recipes.slice());
   }
 }

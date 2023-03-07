@@ -47,7 +47,7 @@
               Update
             </button>
             <button
-              [disabled]="!editMode"
+              *ngIf="editMode"
               class="btn btn-danger"
               type="button"
               (click)="onDeleteItem()"

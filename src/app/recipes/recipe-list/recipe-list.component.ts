@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RecipeService } from 'app/recipes/services/recipe.service';
+import { Subscription } from 'rxjs';
 import { Recipe } from '../models/recipe.model';
 
 @Component({
@@ -9,9 +10,18 @@ import { Recipe } from '../models/recipe.model';
 })
 export class RecipeListComponent {
   recipes: Recipe[] = [];
+  private recipesChangeSubscription: Subscription;
   constructor(private recipesService: RecipeService) {}
 
   ngOnInit() {
     this.recipes = this.recipesService.getRecipes();
+    this.recipesChangeSubscription =
+      this.recipesService.recipesChnaged.subscribe((recipes: Recipe[]) => {
+        this.recipes = recipes;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.recipesChangeSubscription.unsubscribe();
   }
 }
