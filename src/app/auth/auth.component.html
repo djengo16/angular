@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div>
+      <h3>{{ isLoginMode ? "Login" : "Sign Up" }}</h3>
+    </div>
+    <hr />
+    <div class="alert alert-danger" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
+    <div *ngIf="isLoading" style="text-align: center">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form (ngSubmit)="onAuthSubmit()" #authForm="ngForm" *ngIf="!isLoading">
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input
+          class="form-control"
+          type="email"
+          id="email"
+          name="email"
+          ngModel
+          required
+          email
+          #emailInput="ngModel"
+        />
+        <span class="help-block" *ngIf="!emailInput.valid && emailInput.touched"
+          >Please enter valid email address!</span
+        >
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          class="form-control"
+          type="password"
+          id="password"
+          name="password"
+          ngModel
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        <span
+          class="help-block"
+          *ngIf="!passwordInput.valid && passwordInput.touched"
+          >Password should be at least 6 characters long!</span
+        >
+      </div>
+      <div>
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!authForm.valid"
+        >
+          {{ isLoginMode ? "Login" : "Sign Up" }}
+        </button>
+        |
+        <button class="btn btn-primary" (click)="onSwitchMode()" type="button">
+          {{ isLoginMode ? "Switch to Sign Up" : "Switch to Login" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
