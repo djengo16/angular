@@ -16,6 +16,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { SelectRecipeMessageComponent } from './recipes/select-recipe-message/select-recipe-message.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SelectRecipeMessageComponent,
     RecipeEditComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+  ],
   providers: [RecipeService, ShoppingListService],
   bootstrap: [AppComponent],
 })
