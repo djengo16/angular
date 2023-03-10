@@ -1,14 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment.dev';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
 import { AuthResponseData } from './models/auth-response-data.model';
 import { errorCodeMessages } from './common/error-code-messages';
 import { User } from './models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
   apiKey = environment.authApiKey;
 
   constructor(private http: HttpClient) {}
@@ -38,7 +38,17 @@ export class AuthService {
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.apiKey}`,
         { email: email, password: password, returnSecureToken: true }
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((resData) =>
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            parseInt(resData.expiresIn)
+          )
+        )
+      );
   }
 
   private handleAuthentication(
