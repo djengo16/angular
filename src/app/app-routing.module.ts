@@ -7,12 +7,15 @@ import { SelectRecipeMessageComponent } from './recipes/select-recipe-message/se
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipesResolverService } from './recipes/services/recipe-resolver.service';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
+import { NonAuthGuard } from './auth/non-auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
   {
     path: 'recipes',
     component: RecipesComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', component: SelectRecipeMessageComponent }, //default
       { path: 'new', component: RecipeEditComponent },
@@ -29,7 +32,7 @@ const routes: Routes = [
     ],
   },
   { path: 'shopping-list', component: ShoppingListComponent },
-  { path: 'auth', component: AuthComponent },
+  { path: 'auth', component: AuthComponent, canActivate: [NonAuthGuard] },
 ];
 
 @NgModule({
