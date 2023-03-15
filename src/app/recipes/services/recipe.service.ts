@@ -1,29 +1,17 @@
+import { Store } from '@ngrx/store';
 import { Recipe } from 'app/recipes/models/recipe.model';
 import { Ingredient } from 'app/shared/ingredient.model';
 import { Subject } from 'rxjs';
+import * as ShoppingListActions from 'app/shopping/store/shopping-list.actions';
+import { Injectable } from '@angular/core';
+import * as fromShoppingList from 'app/shopping/store/shopping-list.reducer';
 
+@Injectable()
 export class RecipeService {
   recipesChnaged = new Subject<Recipe[]>();
-  // private recipes: Recipe[] = [
-  //   new Recipe(
-  //     'Shakshuka Recipe',
-  //     'Shakshuka is a North African and Middle Eastern meal of poached eggs in a simmering tomato sauce.',
-  //     'https://i2.wp.com/www.downshiftology.com/wp-content/uploads/2018/12/Shakshuka-19.jpg',
-  //     [new Ingredient('Eggs', 4), new Ingredient('Tomato', 2)]
-  //   ),
-  //   new Recipe(
-  //     'Easy Fluffy Pancakes',
-  //     'These pancakes are light and fluffy and made entirely from scratch. They’re not too sweet and are very delicious',
-  //     'https://www.inspiredtaste.net/wp-content/uploads/2022/11/Fluffy-Pancakes-Recipe-Video.jpg',
-  //     [
-  //       new Ingredient('Eggs', 4),
-  //       new Ingredient('Milk', 3),
-  //       new Ingredient('flour', 4),
-  //     ]
-  //   ),
-  // ];
+
   private recipes: Recipe[] = [];
-  constructor() {}
+  constructor(private store: Store<fromShoppingList.AppState>) {}
 
   getRecipes() {
     return this.recipes.slice();
@@ -54,5 +42,8 @@ export class RecipeService {
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;
     this.recipesChnaged.next(this.recipes.slice());
+  }
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
 }
