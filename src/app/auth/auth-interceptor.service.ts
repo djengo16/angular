@@ -5,16 +5,18 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { exhaustMap, take } from 'rxjs';
-import { AuthService } from './auth.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/store/app.reducer';
+import { exhaustMap, map, take } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store<AppState>) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    return this.authService.user.pipe(
+    return this.store.select('auth').pipe(
       take(1),
+      map(authState => authState.user),
       exhaustMap((user) => {
         if (user) {
           const modifiedReq = req.clone({
