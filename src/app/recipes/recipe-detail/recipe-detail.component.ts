@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Ingredient } from 'app/shared/ingredient.model';
-import { ShoppingListService } from 'app/shopping/services/shopping-list.service';
 import { Subscription } from 'rxjs';
 import { Recipe } from '../models/recipe.model';
 import { RecipeService } from '../services/recipe.service';
@@ -16,7 +15,6 @@ export class RecipeDetailComponent {
   recipeSubscription: Subscription;
   recipeIndex: string;
   constructor(
-    private shoppingListService: ShoppingListService,
     private route: ActivatedRoute,
     private recipeService: RecipeService,
     private router: Router
@@ -30,7 +28,7 @@ export class RecipeDetailComponent {
   }
 
   onAddIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.shoppingListService.addIngredients(ingredients);
+    this.recipeService.addIngredientsToShoppingList(ingredients);
   }
 
   onRecipeDelete() {
