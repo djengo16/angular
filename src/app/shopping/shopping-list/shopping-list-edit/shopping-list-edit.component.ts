@@ -5,8 +5,7 @@ import { Store } from '@ngrx/store';
 import { Ingredient } from 'app/shared/ingredient.model';
 import { Subscription } from 'rxjs';
 import * as ShoppingListActions from '../../store/shopping-list.actions';
-import * as fromShoppingList from '../../store/shopping-list.reducer';
-
+import * as fromApp from '../../../store/app.reducer';
 @Component({
   selector: 'app-shopping-list-edit',
   templateUrl: './shopping-list-edit.component.html',
@@ -18,16 +17,13 @@ export class ShoppingListEditComponent implements OnInit {
   editMode = false;
   editedItem: Ingredient;
 
-  constructor(
-    private store: Store<fromShoppingList.AppState>
-  ) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
     this.subscription = this.store
       .select('shoppingList')
       .subscribe((stateData) => {
         if (stateData.editedIngredientIndex > -1) {
-          console.log(stateData.editedIngredient);
           this.editMode = true;
           this.editedItem = stateData.editedIngredient;
 
@@ -50,7 +46,6 @@ export class ShoppingListEditComponent implements OnInit {
 
   onUpdateIngrediant() {
     const editedIngredient = this.getIngredientFromForm();
-    console.log(editedIngredient);
     this.store.dispatch(
       new ShoppingListActions.UpdateIngredient(editedIngredient)
     );

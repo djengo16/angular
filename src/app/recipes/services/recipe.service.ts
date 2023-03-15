@@ -4,14 +4,13 @@ import { Ingredient } from 'app/shared/ingredient.model';
 import { Subject } from 'rxjs';
 import * as ShoppingListActions from 'app/shopping/store/shopping-list.actions';
 import { Injectable } from '@angular/core';
-import * as fromShoppingList from 'app/shopping/store/shopping-list.reducer';
-
+import * as fromApp from '../../store/app.reducer';
 @Injectable()
 export class RecipeService {
   recipesChnaged = new Subject<Recipe[]>();
 
   private recipes: Recipe[] = [];
-  constructor(private store: Store<fromShoppingList.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>) {}
 
   getRecipes() {
     return this.recipes.slice();
