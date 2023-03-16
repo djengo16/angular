@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
+import { calculateExpiryDate } from 'app/shared/date-calc.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -118,7 +119,7 @@ export class AuthService {
     token: string,
     expiresIn: number
   ) {
-    const expiryDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const expiryDate = calculateExpiryDate(expiresIn);
 
     const user = new User(email, userId, token, expiryDate);
     this.store.dispatch(
