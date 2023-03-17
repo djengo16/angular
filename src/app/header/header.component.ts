@@ -4,6 +4,7 @@ import { AuthService } from 'app/auth/auth.service';
 import { DataStorageService } from 'app/shared/data-storage.service';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,7 +16,6 @@ export class HeaderComponent implements OnInit {
   private userSubscription: Subscription;
   constructor(
     private dataStorage: DataStorageService,
-    private authService: AuthService,
     private store: Store<fromApp.AppState>
   ) {}
 
@@ -28,12 +28,15 @@ export class HeaderComponent implements OnInit {
   onSaveData() {
     this.dataStorage.saveRecipes();
   }
+
   onFetchData() {
     this.dataStorage.fetchRecipes().subscribe();
   }
+
   onLogout() {
-    this.authService.logout();
+    this.store.dispatch(new AuthActions.Logout());
   }
+
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
