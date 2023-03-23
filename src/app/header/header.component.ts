@@ -1,10 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthService } from 'app/auth/auth.service';
 import { DataStorageService } from 'app/shared/data-storage.service';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
+import * as RecipeActions from '../recipes/store/recipe.actions';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -30,7 +31,8 @@ export class HeaderComponent implements OnInit {
   }
 
   onFetchData() {
-    this.dataStorage.fetchRecipes().subscribe();
+    //this.dataStorage.fetchRecipes().subscribe();
+    this.store.dispatch(new RecipeActions.GetRecipes());
   }
 
   onLogout() {

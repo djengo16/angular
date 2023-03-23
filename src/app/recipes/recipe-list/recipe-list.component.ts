@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { RecipeService } from 'app/recipes/services/recipe.service';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Subscription } from 'rxjs';
 import { Recipe } from '../models/recipe.model';
+import * as fromApp from '../../store/app.reducer';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-recipe-list',
@@ -10,18 +12,23 @@ import { Recipe } from '../models/recipe.model';
 })
 export class RecipeListComponent {
   recipes: Recipe[] = [];
-  private recipesChangeSubscription: Subscription;
-  constructor(private recipesService: RecipeService) {}
+  private recipesSubscription: Subscription;
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
-    this.recipes = this.recipesService.getRecipes();
-    this.recipesChangeSubscription =
-      this.recipesService.recipesChnaged.subscribe((recipes: Recipe[]) => {
+    this.recipesSubscription = this.store
+      .select('recipes')
+      .pipe(
+        map((recipesState) => {
+          return recipesState.recipes;
+        })
+      )
+      .subscribe((recipes) => {
         this.recipes = recipes;
       });
   }
 
   ngOnDestroy(): void {
-    this.recipesChangeSubscription.unsubscribe();
+    this.recipesSubscription.unsubscribe();
   }
 }

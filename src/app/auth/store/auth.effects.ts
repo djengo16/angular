@@ -75,8 +75,10 @@ export class AuthEffects {
     (): any =>
       this.actions$.pipe(
         ofType(AuthActions.AUTHENTICATE_SUCCESS),
-        tap(() => {
-          this.router.navigate(['/']);
+        tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
+          if (authSuccessAction.payload.redirect) {
+            this.router.navigate(['/']);
+          }
         })
       ),
     { dispatch: false }
@@ -126,6 +128,7 @@ export class AuthEffects {
               userId: userData.userId,
               token: userData.token,
               expiryDate: new Date(userData.expiryDate),
+              redirect: false,
             });
           }
         }
@@ -151,6 +154,7 @@ export class AuthEffects {
       userId: resData.localId,
       token: resData.idToken,
       expiryDate: expiryDate,
+      redirect: true,
     };
     localStorage.setItem('userData', JSON.stringify(userData));
 

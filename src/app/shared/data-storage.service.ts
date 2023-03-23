@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Recipe } from 'app/recipes/models/recipe.model';
-import { RecipeService } from 'app/recipes/services/recipe.service';
-import { exhaustMap, map, take, tap } from 'rxjs';
-import { AuthService } from 'app/auth/auth.service';
+import { map, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+
+import * as RecipeActions from '../recipes/store/recipe.actions';
+import * as fromApp from '../store/app.reducer';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
@@ -11,13 +13,11 @@ export class DataStorageService {
     'https://ng-course-recipe-book-1cf48-default-rtdb.europe-west1.firebasedatabase.app/recipes.json';
   constructor(
     private http: HttpClient,
-    private recipeService: RecipeService,
-    private authService: AuthService
+    private store: Store<fromApp.AppState>
   ) {}
 
   saveRecipes() {
-    const recipes = this.recipeService.getRecipes();
-    this.http.put(this.url, recipes).subscribe((response) => {});
+    this.store.dispatch(new RecipeActions.StoreRecipes());
   }
 
   fetchRecipes() {
@@ -61,7 +61,7 @@ export class DataStorageService {
         });
       }),
       tap((recipesResponse) => {
-        this.recipeService.setRecipes(recipesResponse);
+        this.store.dispatch(new RecipeActions.SetRecipes(recipesResponse));
       })
     );
   }
